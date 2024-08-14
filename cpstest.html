@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPS Test</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            text-align: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+            color: #FFD700;
+            text-shadow: 3px 3px 5px #000000;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .modes {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mode-button {
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .mode-button:hover {
+            background-color: #27ae60;
+            transform: scale(1.05);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 4s ease-in-out;
+        }
+
+        .cps-button {
+            width: 350px;
+            height: 350px;
+            background-color: #3498db;
+            border: none;
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 3.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .cps-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.1);
+        }
+
+        .stats {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .leaderboard {
+            margin-top: 30px;
+            font-size: 1.2em;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .leaderboard h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CPS Test</h1>
+    <div class="modes">
+        <button class="mode-button" onclick="setTime(1)">1 Second</button>
+        <button class="mode-button" onclick="setTime(2)">2 Seconds</button>
+        <button class="mode-button" onclick="setTime(5)">5 Seconds</button>
+        <button class="mode-button" onclick="setTime(10)">10 Seconds</button>
+        <button class="mode-button" onclick="setTime(15)">15 Seconds</button>
+    </div>
+    <div class="container">
+        <button class="cps-button" id="cpsButton">Click Me!</button>
+        <div class="stats">
+            Time Left: <span id="timeLeft">10</span>s<br>
+            Clicks: <span id="clicks">0</span><br>
+            CPS: <span id="cps">0.00</span>
+        </div>
+    </div>
+    <div class="leaderboard">
+        <h2>Your Best Scores:</h2>
+        <ul id="leaderboardList">
+            <!-- Scores will be dynamically added here -->
+        </ul>
+    </div>
+
+    <script>
+        const cpsButton = document.getElementById('cpsButton');
+        const timeLeftElement = document.getElementById('timeLeft');
+        const clicksElement = document.getElementById('clicks');
+        const cpsElement = document.getElementById('cps');
+        const leaderboardList = document.getElementById('leaderboardList');
+
+        let timeLeft = 10;
+        let clicks = 0;
+        let cps = 0;
+        let gameActive = false;
+        let interval;
+        let selectedTime = 10; // Default game time
+
+        function setTime(seconds) {
+            selectedTime = seconds;
+            resetGame();
+        }
+
+        cpsButton.addEventListener('click', () => {
+            if (!gameActive) startGame();
+            clicks++;
+            clicksElement.textContent = clicks;
+        });
+
+        function startGame() {
+            gameActive = true;
+            timeLeft = selectedTime;
+            clicks = 0;
+            cps = 0;
+            clicksElement.textContent = clicks;
+            cpsElement.textContent = cps.toFixed(2);
+            timeLeftElement.textContent = timeLeft;
+
+            interval = setInterval(() => {
+                timeLeft--;
+                timeLeftElement.textContent = timeLeft;
+
+                if (timeLeft === 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            clearInterval(interval);
+            cps = clicks / selectedTime;
+            cpsElement.textContent = cps.toFixed(2);
+            gameActive = false;
+            saveScore(cps);
+        }
+
+        function saveScore(score) {
+            const scores = JSON.parse(localStorage.getItem('cpsScores')) || [];
+            scores.push(score);
+            scores.sort((a, b) => b - a);
+            if (scores.length > 5) scores.pop(); // Keep only top 5 scores
+            localStorage.setItem('cpsScores', JSON.stringify(scores));
+            displayScores(scores);
+        }
+
+        function displayScores(scores) {
+            leaderboardList.innerHTML = '';
+            scores.forEach((score, index) => {
+                const li = document.createElement('li');
+                li.textContent = `#${index + 1}: ${score.toFixed(2)} CPS`;
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        function resetGame() {
+            clearInterval(interval);
+            clicks = 0;
+            cps = 0;
+            timeLeft = selectedTime;
+            clicksElement.textContent = clicks;
+            cpsElement.textContent = cps.toFixed(2);
+            timeLeftElement.textContent = timeLeft;
+            gameActive = false;
+        }
+
+        window.onload = () => {
+            const scores = JSON.parse(localStorage.getItem('cpsScores')) || [];
+            displayScores(scores);
+        };
+    </script>
+</body>
+</html>
