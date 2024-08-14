@@ -6,16 +6,15 @@
     <title>Slime Jump</title>
 
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JE3QT27RTF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JE3QT27RTF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-  gtag('config', 'G-JE3QT27RTF');
-</script>
+        gtag('config', 'G-JE3QT27RTF');
+    </script>
 
-    
     <style>
         /* Global Styles */
         body, html {
@@ -30,6 +29,7 @@
             justify-content: flex-start;
             height: 100vh;
             color: #ffffff;
+            animation: fadeIn 2s ease-in-out;
         }
 
         h1 {
@@ -39,6 +39,7 @@
             text-shadow: 3px 3px 5px #000000;
             letter-spacing: 2px;
             font-weight: bold;
+            animation: fadeInDown 1s ease-in-out forwards;
         }
 
         .game-container {
@@ -51,6 +52,9 @@
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             overflow: hidden;
+            animation: fadeInUp 2s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 1s;
         }
 
         #gameCanvas {
@@ -67,6 +71,9 @@
             font-size: 1.5em;
             color: #00ff6a;
             text-shadow: 2px 2px 4px #000000;
+            animation: fadeInDown 1.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 1.5s;
         }
 
         .controls {
@@ -81,6 +88,9 @@
             padding: 8px 15px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 2.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 2s;
         }
 
         .player {
@@ -88,6 +98,7 @@
             background-color: #00FF00;
             box-shadow: 0 4px 8px rgba(0, 255, 0, 0.5);
             border-radius: 5px;
+            animation: pulse 1s infinite alternate;
         }
 
         .platform {
@@ -104,6 +115,51 @@
             font-size: 1.5em;
             color: #00ff6a;
             text-shadow: 2px 2px 4px #000000;
+            animation: fadeInDown 1.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                box-shadow: 0 0 10px #00FF00;
+            }
+            to {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px #00FF00;
+            }
         }
     </style>
 </head>
