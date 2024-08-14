@@ -15,7 +15,6 @@
         gtag('config', 'G-JE3QT27RTF');
     </script>
 
-    
     <style>
         /* Global Styles */
         * {
@@ -23,6 +22,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -35,16 +35,19 @@
             text-align: center;
             flex-direction: column;
             padding: 20px;
+            overflow: hidden;
+            cursor: url('https://cdn.custom-cursor.com/db/72/23745/cursor.png'), auto;
+            animation: fadeIn 2s ease-in-out;
         }
 
         h1 {
             font-size: 4em;
             margin-bottom: 20px;
-            animation: fadeIn 2s ease-in-out;
             color: #FFD700;
             text-shadow: 3px 3px 5px #000000;
             letter-spacing: 2px;
             font-weight: bold;
+            animation: fadeInDown 1s ease-in-out forwards;
         }
 
         .modes {
@@ -53,6 +56,9 @@
             justify-content: space-around;
             gap: 10px;
             flex-wrap: wrap;
+            animation: fadeInDown 1.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 0.5s;
         }
 
         .mode-button {
@@ -83,25 +89,27 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
             max-width: 600px;
             width: 100%;
-            animation: fadeIn 4s ease-in-out;
+            animation: fadeInUp 2s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 1s;
         }
 
         .cps-button {
             width: 350px;
             height: 350px;
-            background-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
             border: none;
             border-radius: 50%;
             color: #ffffff;
             font-size: 3.5em;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
         }
 
         .cps-button:hover {
-            background-color: #2980b9;
+            background: linear-gradient(135deg, #2980b9, #27ae60);
             transform: scale(1.1);
         }
 
@@ -110,6 +118,9 @@
             font-size: 1.5em;
             color: #FFD700;
             text-shadow: 2px 2px 4px #000000;
+            animation: fadeInUp 2s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 1.5s;
         }
 
         .leaderboard {
@@ -120,6 +131,9 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 2.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 2s;
         }
 
         .leaderboard h2 {
@@ -135,6 +149,28 @@
             }
             to {
                 opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
