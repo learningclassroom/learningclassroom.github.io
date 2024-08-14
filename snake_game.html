@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Snake Game</title>
+    <title>Snake Game</title>
     <style>
         /* Global Styles */
         * {
@@ -18,14 +18,19 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             color: #ffffff;
             text-align: center;
+            flex-direction: column;
         }
 
         h1 {
             font-size: 3em;
             margin-bottom: 20px;
+            color: #00ff6a;
+            text-shadow: 3px 3px 5px #000000;
+            letter-spacing: 2px;
+            font-weight: bold;
             animation: fadeIn 2s ease-in-out;
         }
 
@@ -41,8 +46,8 @@
             top: 20px;
             font-size: 1.5em;
             text-align: center;
-            color: #ffffff;
-            animation: fadeIn 2s ease-in-out;
+            color: #00ff6a;
+            text-shadow: 2px 2px 4px #000000;
         }
 
         .scoreboard div {
@@ -50,7 +55,7 @@
         }
 
         canvas {
-            border: 5px solid #ecf0f1;
+            border: 5px solid #00ff6a;
             background-color: #0f3460;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
             animation: fadeIn 4s ease-in-out;
@@ -105,15 +110,13 @@
     </style>
 </head>
 <body>
-    <div>
-        <h1>Snake Game</h1>
-        <h2>Use the Arrow Keys to Play</h2>
-        <div class="scoreboard">
-            <div>Score: <span id="score">0</span></div>
-            <div>High Score: <span id="highScore">0</span></div>
-        </div>
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <h1>Snake Game</h1>
+    <h2>Use the Arrow Keys to Play</h2>
+    <div class="scoreboard">
+        <div>Score: <span id="score">0</span></div>
+        <div>High Score: <span id="highScore">0</span></div>
     </div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
