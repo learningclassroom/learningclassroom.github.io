@@ -3,24 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rounded Squares with Hover Animation</title>
+    <title>Welcome to the Learning Classroom</title>
     <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            color: #ddd;
+            animation: fadeIn 3s ease-in-out;
         }
 
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 20px;
-            max-width: 80%;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            padding: 20px;
+            animation: fadeIn 4s ease-in-out;
+        }
+
+        .item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .item:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
 
         .square {
@@ -31,52 +73,102 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+            transition: background 0.3s ease, transform 0.3s ease;
         }
 
         .square:hover {
-            transform: scale(1.1);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background-color: #2980b9;
+            transform: rotate(15deg);
         }
 
         .name {
-            margin-top: 10px;
-            text-align: center;
-            font-size: 16px;
-            color: #333;
+            font-size: 1.2em;
+            color: #ffffff;
         }
 
-        .item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+
+            .square {
+                width: 80px;
+                height: 80px;
+                font-size: 1.5em;
+            }
+
+            .name {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1em;
+            }
+
+            .square {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2em;
+            }
+
+            .name {
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="item" onclick="window.location.href='snake_game.html'">
-            <div class="square"></div>
-            <div class="name">Snake Game</div>
+    <div>
+        <h1>Welcome to the Game Hub</h1>
+        <h2>Select a Game to Start Playing</h2>
+        <div class="container">
+            <div class="item" onclick="window.location.href='snake_game.html'">
+                <div class="square">🐍</div>
+                <div class="name">Snake Game</div>
+            </div>
+            <div class="item">
+                <div class="square">🚀</div>
+                <div class="name">Coming Soon</div>
+            </div>
+            <div class="item">
+                <div class="square">🎮</div>
+                <div class="name">Coming Soon</div>
+            </div>
+            <div class="item">
+                <div class="square">⚽</div>
+                <div class="name">Coming Soon</div>
+            </div>
+            <!-- Add more items as needed -->
         </div>
-        <div class="item">
-            <div class="square"></div>
-            <div class="name">Name 2</div>
-        </div>
-        <div class="item">
-            <div class="square"></div>
-            <div class="name">Name 3</div>
-        </div>
-        <div class="item">
-            <div class="square"></div>
-            <div class="name">Name 4</div>
-        </div>
-        <div class="item">
-            <div class="square"></div>
-            <div class="name">Name 5</div>
-        </div>
-        <!-- Add more items as needed -->
     </div>
+
+    <script>
+        // You can add any additional JavaScript here for future interaction
+    </script>
 </body>
 </html>
