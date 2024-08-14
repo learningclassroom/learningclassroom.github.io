@@ -18,7 +18,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             color: #ffffff;
             text-align: center;
             flex-direction: column;
@@ -29,8 +29,10 @@
             font-size: 4em;
             margin-bottom: 10px;
             animation: fadeIn 2s ease-in-out;
-            color: #ffd700;
-            text-shadow: 2px 2px 4px #000000;
+            color: #00ff6a;
+            text-shadow: 3px 3px 5px #000000;
+            letter-spacing: 2px;
+            font-weight: bold;
         }
 
         h2 {
@@ -43,12 +45,12 @@
         p.bookmark-message {
             font-size: 1.2em;
             margin-bottom: 40px;
-            color: #ffd700;
+            color: #00ff6a;
             animation: fadeIn 3s ease-in-out;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         .container {
@@ -70,7 +72,7 @@
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
             cursor: pointer;
             transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
         }
@@ -78,14 +80,14 @@
         .item:hover {
             transform: translateY(-10px);
             background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
 
         .square {
             width: 120px;
             height: 120px;
             background-color: #3498db;
-            border-radius: 15px;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -98,12 +100,14 @@
 
         .square:hover {
             background-color: #2980b9;
-            transform: rotate(15deg);
+            transform: scale(1.1);
         }
 
         .name {
             font-size: 1.3em;
             color: #ffffff;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
         /* Keyframe Animations */
@@ -167,6 +171,10 @@
             <div class="square">🐍</div>
             <div class="name">Snake Game</div>
         </div>
+        <div class="item" onclick="window.location.href='slimejump.html'">
+            <div class="square">🟢</div>
+            <div class="name">Slime Jump</div>
+        </div>
         <div class="item">
             <div class="square">🚀</div>
             <div class="name">Coming Soon</div>
@@ -198,7 +206,7 @@
     </div>
 
     <script>
-        // You can add any additional JavaScript here for future interaction
+        // Additional JavaScript interactions can be added here if needed
     </script>
 </body>
 </html>
