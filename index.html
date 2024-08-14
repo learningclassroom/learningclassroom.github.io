@@ -22,6 +22,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -34,12 +35,14 @@
             text-align: center;
             flex-direction: column;
             padding: 20px;
+            overflow: hidden;
+            cursor: url('https://cdn.custom-cursor.com/db/72/23745/cursor.png'), auto;
         }
 
         h1 {
             font-size: 4em;
             margin-bottom: 10px;
-            animation: fadeIn 2s ease-in-out;
+            animation: fadeInDown 1s ease-in-out forwards;
             color: #00ff6a;
             text-shadow: 3px 3px 5px #000000;
             letter-spacing: 2px;
@@ -50,18 +53,22 @@
             font-size: 1.8em;
             margin-bottom: 30px;
             color: #eee;
-            animation: fadeIn 3s ease-in-out;
+            animation: fadeInDown 1.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 0.5s;
         }
 
         p.bookmark-message {
             font-size: 1.2em;
             margin-bottom: 40px;
             color: #00ff6a;
-            animation: fadeIn 3s ease-in-out;
+            animation: fadeInDown 2s ease-in-out forwards;
             background: rgba(255, 255, 255, 0.1);
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            animation-delay: 1s;
         }
 
         .container {
@@ -71,7 +78,9 @@
             width: 100%;
             max-width: 1200px;
             padding: 20px;
-            animation: fadeIn 4s ease-in-out;
+            animation: fadeInUp 1.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 2s;
         }
 
         .item {
@@ -86,10 +95,29 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
             cursor: pointer;
             transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 70%);
+            transform: rotate(45deg);
+            transition: left 0.5s ease;
+            z-index: 0;
+        }
+
+        .item:hover::before {
+            left: 0;
         }
 
         .item:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) rotate(3deg);
             background: rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
@@ -97,7 +125,7 @@
         .square {
             width: 120px;
             height: 120px;
-            background-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -107,11 +135,12 @@
             color: #ffffff;
             margin-bottom: 10px;
             transition: background 0.3s ease, transform 0.3s ease;
+            z-index: 1;
         }
 
         .square:hover {
-            background-color: #2980b9;
-            transform: scale(1.1);
+            background: linear-gradient(135deg, #2980b9, #27ae60);
+            transform: scale(1.1) rotate(-3deg);
         }
 
         .name {
@@ -119,15 +148,39 @@
             color: #ffffff;
             font-weight: bold;
             letter-spacing: 1px;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease-in-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        .item:hover .name {
+            animation: fadeInUp 0.5s ease-in-out forwards;
+            transform: translateY(0);
+            opacity: 1;
         }
 
         /* Keyframe Animations */
-        @keyframes fadeIn {
+        @keyframes fadeInDown {
             from {
                 opacity: 0;
+                transform: translateY(-30px);
             }
             to {
                 opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
