@@ -1,2 +1,2 @@
 # learningclassroom.github.io
-Learning fun
+This is the best website to learn!
