@@ -1,1 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Guess</title>
+
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JE3QT27RTF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-JE3QT27RTF');
+</script>
+
+  
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #66d3fa;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #66d3fa;
+            text-shadow: 3px 3px 5px #000000;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .tile {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            font-size: 2em;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #333;
+            border: 2px solid #444;
+            border-radius: 10px;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.3s;
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); }
+            100% { transform: scale(1); }
+        }
+
+        .tile.correct {
+            background-color: #2ecc71;
+            transform: scale(1.1);
+            animation: bounce 0.3s ease;
+        }
+
+        .tile.present {
+            background-color: #f1c40f;
+            transform: scale(1.1);
+            animation: bounce 0.3s ease;
+        }
+
+        .tile.absent {
+            background-color: #333;
+            transform: scale(1.1);
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        .keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+
+        .key {
+            width: 50px;
+            height: 60px;
+            margin: 5px;
+            background-color: #555;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.5em;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .key:hover {
+            background-color: #666;
+            transform: scale(1.05);
+        }
+
+        .key.correct {
+            background-color: #2ecc71;
+        }
+
+        .key.present {
+            background-color: #f1c40f;
+        }
+
+        .key.absent {
+            background-color: #333;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls .key {
+            width: 150px;
+            font-size: 1.2em;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #66d3fa;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Word Guess</h1>
+    <div class="game-container">
+        <div id="board"></div>
+    </div>
+    <div class="keyboard">
+        <div id="keyboard"></div>
+    </div>
+    <div class="controls">
+        <button id="enterButton" class="key">Enter</button>
+        <button id="restartButton" class="key">Restart</button>
+    </div>
+    <div class="message" id="message"></div>
+
+    <script>
+        // Your custom list of words
+        const wordList = [
+            // A words
+            "abbey", "abode", "acorn", "acrid", "actor", "acute", "adept", "adobe", "aegis", "afire",
+            "agent", "aglow", "aisle", "alarm", "album", "alert", "alien", "align", "alley", "allow",
+            "amber", "amble", "amend", "amuse", "angel", "angle", "angry", "anvil", "apple", "apply",
+            "apron", "argon", "arise", "armor", "aroma", "arose", "arrow", "ashen", "aside", "askew",
+            "atlas", "atoll", "atone", "attic", "audio", "aunty", "aural", "awake", "award", "aware",
+            "awash", "axial", "axiom", "azure", "aback", "abash", "abyss", "addle", "adore", "adorn",
+            "affix", "after", "algae", "align", "aloft", "altar", "amber", "amble", "ample", "amply",
+            "angel", "angle", "ankle", "annex", "apple",
+        
+            // B words
+            "babel", "badge", "bagel", "baker", "balmy", "banjo", "barge", "barns", "batch", "baste",
+            "batch", "baton", "bawdy", "beach", "beady", "beast", "belay", "below", "bench", "berth",
+            "bible", "binge", "bison", "bland", "blast", "bleak", "blend", "bless", "blind", "blitz",
+            "bloke", "bluff", "blunt", "board", "boast", "bobby", "bokeh", "boldly", "bolts", "booth",
+            "botch", "bough", "bound", "brash", "brass", "brave", "bravo", "bread", "break", "breed",
+            "brick", "bride", "brief", "bring", "broad", "broil", "broke", "brown", "brush", "budge",
+            "buggy", "build", "bulge", "bulky", "bunch", "bunny", "burst", "butch", "butte", "buyer",
+            "bylaw", "bypass", "byway",
+        
+            // C words
+            "cabin", "cache", "caddy", "cagey", "camel", "canal", "candy", "canoe", "canon", "caper",
+            "cargo", "carol", "carve", "caste", "catch", "cause", "cavil", "cedar", "chafe", "chain",
+            "chair", "chalk", "chant", "chaos", "charm", "chart", "chase", "cheek", "cheer", "chess",
+            "chest", "chief", "child", "chime", "china", "choir", "choke", "chord", "chose", "clamp",
+            "clash", "clasp", "clean", "clear", "clerk", "click", "cling", "cloak", "clock", "clone",
+            "close", "cloth", "cloud", "clown", "coach", "coast", "cobra", "codec", "colon", "color",
+            "comet", "comfy", "comic", "coral", "crane", "crash", "crawl", "craze", "creek", "crest",
+            "crown", "crude", "crumb", "crush", "curve", "cyber",
+        
+            // D words
+            "daddy", "daily", "dairy", "daisy", "dance", "dandy", "dated", "daunt", "dealt", "death",
+            "debit", "debut", "decay", "decor", "decoy", "decry", "defer", "deign", "deity", "delay",
+            "delta", "delve", "demon", "demur", "denim", "dense", "depot", "depth", "derby", "desks",
+            "devil", "diary", "dingo", "dingo", "disco", "ditch", "diver", "dizzy", "dodge", "dogma",
+            "doing", "donor", "donut", "doorway", "doubt", "dowdy", "dozen", "draft", "drain", "drama",
+            "drank", "dread", "dream", "dress", "drift", "drill", "drink", "drive", "droid", "drone",
+            "drool", "drown", "drunk", "druid", "dryly", "duchy", "dully", "dummy", "duvet", "dwelt",
+            "dying", "dwarf", "dwell", "dying",
+        
+            // E words
+            "eager", "eagle", "early", "earth", "ebony", "eclat", "edict", "edify", "eerie", "egret",
+            "eight", "elbow", "elder", "elect", "elfin", "elide", "elite", "elope", "elude", "ember",
+            "emcee", "empty", "enact", "endow", "entry", "envoy", "epoch", "equal", "equip", "erase",
+            "erect", "erode", "error", "essay", "ester", "ether", "ethic", "ethos", "evade", "event",
+            "every", "exact", "exalt", "excel", "exert", "exile", "exist", "expel", "extol", "extra",
+            "exult", "eying", "eject", "elate", "equip", "elope", "elude", "elite", "emery", "empty",
+            "entry", "erase", "essay", "evade", "excel", "extra", "exult", "enact", "equip", "eight",
+            "epoch", "erect", "evade", "extol", "ethos", "ether", "erupt", "edict", "eagle",
+        
+            // F words
+            "facet", "faint", "fairy", "faith", "false", "fancy", "farce", "fatal", "fault", "favor",
+            "feast", "felon", "fence", "fetch", "fever", "field", "fiery", "fight", "final", "finch",
+            "flair", "flame", "flank", "flare", "flash", "flask", "fleet", "flesh", "flint", "float",
+            "flock", "flood", "flora", "floss", "flour", "fluff", "fluid", "fluke", "flute", "focus",
+            "foggy", "folks", "foamy", "foist", "folio", "folly", "foray", "force", "forge", "forgo",
+            "forte", "forth", "forty", "forum", "fossil", "found", "frail", "frame", "frank", "fraud",
+            "freak", "freed", "fresh", "fried", "frost", "fruit", "fudge", "fuels", "fully", "fungi",
+            "funny", "furor", "furry", "fussy", "fuzzy", "facet", "faint", "fairy", "faith", "false",
+        
+            // G words
+            "gaily", "gamer", "gamma", "gamut", "gavel", "gawky", "gayer", "gazer", "geese", "genie",
+            "genre", "ghost", "ghoul", "giant", "giddy", "gipsy", "girth", "given", "giver", "glade",
+            "gland", "glare", "glass", "glaze", "gleam", "glide", "glint", "gloat", "globe", "gloom",
+            "glory", "gloss", "glove", "gnarl", "gnash", "gnome", "goads", "goals", "goats", "godly",
+            "going", "golly", "gonad", "goner", "goods", "goody", "gooey", "goofy", "goose", "gorge",
+            "gouge", "grace", "grade", "graft", "grain", "grand", "grant", "grape", "graph", "grasp",
+            "grass", "grate", "grave", "gravy", "graze", "great", "greed", "green", "greet", "grief",
+            "grill", "grime", "grind", "grins", "grips", "gripe", "grits", "groan", "groom", "grope",
+        
+            // H words
+            "habit", "hatch", "hasty", "hatch", "hazel", "heads", "heard", "heart", "heath", "heave",
+            "heavy", "hedge", "hefty", "heist", "helix", "hello", "helms", "helps", "herbs", "heron",
+            "hiker", "hinge", "hippo", "hitch", "hoard", "hoist", "honey", "honor", "hoops", "hoots",
+            "horns", "horse", "hotel", "hound", "house", "hover", "howls", "hunch", "hurry", "husky",
+            "hutch", "hydra", "hyena", "hymns", "hyped", "hyper", "habit", "haiku", "hairy", "halve",
+            "hands", "handy", "hangs", "harsh", "haste", "hasty", "hatch", "haven", "hazel", "heads",
+            "heart", "heave", "heavy", "hedge", "hefty", "hence", "herbs", "heron", "hiker", "hinge",
+            "hippo", "hitch", "hoard", "hoist", "honey", "honor",
+        
+            // I words
+            "icing", "ideal", "ideas", "idiom", "idiot", "idyll", "igloo", "image", "imply", "inbox",
+            "incur", "index", "infer", "input", "inset", "intro", "ionic", "irate", "irony", "issue",
+            "itchy", "ivory", "icing", "ideal", "idiom", "idiot", "idyll", "igloo", "image", "imply",
+            "inbox", "incur", "index", "infer", "input", "inset", "intro", "ionic", "irate", "irony",
+            "issue", "itchy", "ivory", "icing", "ideal", "ideas", "idiom", "idiot", "idyll", "igloo",
+            "image", "imply", "inbox", "incur", "index", "infer", "input", "inset", "intro", "ionic",
+            "irate", "irony", "issue", "itchy", "ivory", "icing", "ideal", "idiom", "idiot", "idyll",
+            "igloo", "image", "imply", "inbox", "incur", "index", "infer", "input", "inset", "intro",
+        
+            // J words
+            "jaded", "jails", "jambs", "japan", "jaunt", "jazzy", "jeans", "jelly", "jerky", "jests",
+            "jewel", "jiffy", "joins", "joint", "joist", "joker", "jolly", "joust", "judge", "juice",
+            "juicy", "jumbo", "jumps", "jumpy", "junco", "junta", "junto", "juror", "juste", "jaded",
+            "jails", "jambs", "japan", "jaunt", "jazzy", "jeans", "jelly", "jerky", "jests", "jewel",
+            "jiffy", "joins", "joint", "joist", "joker", "jolly", "joust", "judge", "juice", "juicy",
+            "jumbo", "jumps", "jumpy", "junco", "junta", "junto", "juror", "juste", "jaded", "jails",
+            "jambs", "japan", "jaunt", "jazzy", "jeans", "jelly", "jerky", "jests", "jewel", "jiffy",
+        
+            // K words
+            "kabob", "kappa", "karma", "kayak", "kazoo", "keeps", "kendo", "ketch", "keyed", "khaki",
+            "kicks", "kills", "kinda", "kinks", "kiosk", "kitty", "knack", "knave", "kneel", "knelt",
+            "knife", "knobs", "knock", "knoll", "known", "knows", "kudos", "kabob", "kappa", "karma",
+            "kayak", "kazoo", "keeps", "kendo", "ketch", "keyed", "khaki", "kicks", "kills", "kinda",
+            "kinks", "kiosk", "kitty", "knack", "knave", "kneel", "knelt", "knife", "knobs", "knock",
+            "knoll", "known", "knows", "kudos", "kabob", "kappa", "karma", "kayak", "kazoo", "keeps",
+            "kendo", "ketch", "keyed", "khaki", "kicks", "kills", "kinda", "kinks", "kiosk", "kitty",
+        
+            // L words
+            "label", "laced", "laces", "lacks", "ladle", "lairs", "lakes", "lamps", "lance", "lands",
+            "lanes", "lanky", "lapel", "lapse", "large", "larks", "larva", "laser", "latch", "later",
+            "latex", "laugh", "layer", "leads", "leafs", "leaks", "leans", "leant", "leaps", "learn",
+            "lease", "leash", "least", "leave", "ledge", "leech", "leers", "lefts", "legal", "lemon",
+            "lemur", "lends", "leper", "level", "lever", "liana", "liars", "lifts", "light", "liked",
+            "likes", "limbs", "limps", "lined", "linen", "liner", "lines", "links", "lions", "lives",
+            "loafs", "loans", "locks", "lodge", "lofts", "loins", "lolls", "lones", "looks", "loops",
+            "loped", "lopes", "lords", "loved", "lover", "loves", "lower", "lulls", "lumpy", "lunar",
+        
+            // M words
+            "macaw", "macho", "macro", "madam", "madly", "mafia", "magic", "magma", "mains", "major",
+            "maker", "males", "malls", "mamba", "mamma", "manly", "maple", "march", "marks", "mason",
+            "masts", "match", "mates", "maths", "matte", "meals", "means", "meant", "meats", "medal",
+            "media", "medic", "meets", "melts", "memos", "mends", "menus", "mercy", "meres", "merit",
+            "merry", "metal", "meted", "meter", "metro", "mewed", "midge", "midst", "might", "milds",
+            "miles", "mills", "mimes", "minds", "mined", "miner", "mines", "minor", "mints", "minus",
+            "mirth", "mists", "mixer", "moats", "mocks", "model", "modem", "modes", "molar", "moles",
+            "molls", "money", "month", "moons", "moors", "moral", "moron", "morph", "mossy", "motel",
+        
+            // N words
+            "nails", "naive", "naked", "named", "names", "nanny", "napes", "nappy", "narcs", "nasal",
+            "nasty", "natal", "naves", "navel", "nears", "neath", "necks", "needs", "needy", "neons",
+            "nerds", "nerdy", "nerve", "nests", "never", "newer", "newly", "nexus", "nicer", "niche",
+            "nicks", "niece", "night", "nines", "ninth", "noble", "nodes", "noise", "noisy", "nomad",
+            "nooks", "noose", "north", "nosed", "noses", "nouns", "novas", "novel", "nudes", "nudge",
+            "nuked", "nukes", "numbs", "nurse", "nutty", "nylon", "nymph", "nails", "naive", "naked",
+            "named", "names", "nanny", "napes", "nappy", "narcs", "nasal", "nasty", "natal", "naves",
+            "navel", "nears", "neath", "necks", "needs", "needy", "neons", "nerds", "nerdy", "nerve",
+        
+            // O words
+            "oaken", "oases", "oasis", "oaths", "obese", "obeys", "occur", "ocean", "octal", "octet",
+            "odder", "oddly", "odium", "offal", "offed", "offer", "often", "ogled", "ogler", "ogles",
+            "oiled", "olden", "older", "oldie", "olive", "ombre", "omega", "omens", "omits", "onion",
+            "onset", "oozed", "oozes", "opals", "opens", "opera", "opine", "opium", "opted", "optic",
+            "orals", "orbit", "order", "organ", "other", "otter", "ought", "ounce", "ousts", "outdo",
+            "outed", "outer", "outgo", "ouzos", "ovals", "ovary", "ovens", "overs", "overt", "ovine",
+            "ovoid", "owing", "owlet", "owned", "owner", "oxide", "ozone", "oaken", "oases", "oasis",
+            "oaths", "obese", "obeys", "occur", "ocean", "octal", "octet", "odder", "oddly", "odium",
+        
+            // P words
+            "pacer", "packs", "pacts", "paddy", "pagan", "paged", "pager", "pages", "pains", "paint",
+            "pairs", "paled", "paler", "pales", "palms", "palmy", "palsy", "panda", "panel", "panes",
+            "pangs", "panic", "pansy", "pants", "panty", "paper", "parer", "pares", "parks", "parry",
+            "parse", "parts", "party", "pasha", "paste", "pasts", "pated", "pater", "pates", "paths",
+            "patio", "patsy", "patty", "pause", "paved", "paves", "pawns", "payee", "payer", "peace",
+            "peach", "peaks", "peals", "pearl", "pears", "peart", "pecan", "peeks", "peels", "peeps",
+            "peers", "pelts", "penal", "pence", "penes", "penis", "penny", "perch", "peril", "perks",
+            "perky", "perms", "pesky", "pesto", "pests", "petal", "petty", "phage", "phase", "phial",
+        
+            // Q words
+            "quack", "quads", "quail", "quais", "quake", "quaky", "qualm", "quark", "quart", "quash",
+            "quasi", "quays", "queen", "queer", "quell", "query", "quest", "queue", "quick", "quids",
+            "quiet", "quill", "quilt", "quint", "quips", "quirk", "quirt", "quite", "quits", "quoin",
+            "quoit", "quota", "quote", "quoth", "quran", "quack", "quads", "quail", "quais", "quake",
+            "quaky", "qualm", "quark", "quart", "quash", "quasi", "quays", "queen", "queer", "quell",
+            "query", "quest", "queue", "quick", "quids", "quiet", "quill", "quilt", "quint", "quips",
+            "quirk", "quirt", "quite", "quits", "quoin", "quoit", "quota", "quote", "quoth", "quran",
+        
+            // R words
+            "raced", "racer", "races", "racks", "radar", "radii", "radio", "radix", "rafts", "raged",
+            "rages", "raids", "rails", "rains", "rainy", "raise", "rajah", "raked", "rakes", "rally",
+            "ramps", "ranch", "randy", "range", "ranks", "rants", "raped", "raper", "rapes", "rapid",
+            "rarer", "raspy", "rated", "rates", "ratty", "raved", "ravel", "raven", "raver", "raves",
+            "rawer", "razed", "razes", "reach", "react", "reads", "ready", "realm", "reals", "reams",
+            "reaps", "rears", "rebar", "rebel", "rebid", "rebus", "rebut", "recap", "recon", "recto",
+            "recur", "redid", "redly", "redux", "reeds", "reefs", "reeks", "reels", "refed", "refer",
+            "refit", "regal", "rehab", "reign", "reins", "relax", "relay", "relic", "remix", "renal",
+        
+            // S words
+            "saber", "sable", "sacks", "sacra", "sadly", "safer", "safes", "sages", "sails", "saint",
+            "sakes", "salad", "sales", "salts", "salve", "salvo", "samba", "sands", "sandy", "saner",
+            "sappy", "sarge", "saris", "sassy", "sated", "sates", "satin", "satyr", "sauce", "saucy",
+            "sauna", "saved", "saver", "saves", "savor", "savoy", "savvy", "scabs", "scald", "scale",
+            "scalp", "scamp", "scams", "scans", "scant", "scape", "scare", "scarf", "scars", "scary",
+            "scats", "scaup", "scene", "scent", "scion", "scoff", "scold", "scone", "scoop", "scoot",
+            "scope", "score", "scorn", "scour", "scout", "scowl", "scows", "scram", "scrap", "screw",
+            "scrub", "scrum", "scuba", "scuff", "seals", "seams", "sears", "seats", "sects", "sedan",
+        
+            // T words
+            "table", "taboo", "tacit", "tacks", "tacos", "tails", "taint", "taken", "taker", "takes",
+            "tales", "talks", "talky", "tamed", "tamer", "tames", "tamps", "tango", "tangy", "tanks",
+            "taped", "taper", "tapes", "tapir", "tardy", "tared", "tares", "tarns", "tarot", "tarry",
+            "tarts", "tasks", "taste", "tasty", "tatty", "taunt", "taxed", "taxer", "taxes", "taxis",
+            "taxis", "teach", "teaks", "teams", "tears", "teary", "tease", "teddy", "teems", "teens",
+            "teeny", "teeth", "tells", "telly", "tempi", "tempo", "temps", "tempt", "tench", "tends",
+            "tenet", "tenor", "tense", "tenth", "tents", "tepee", "terms", "terns", "testy", "tests",
+            "texts", "thank", "thaws", "theft", "their", "theme", "thens", "there", "these", "theta",
+        
+            // U words
+            "udder", "ulcer", "ultra", "umami", "umbra", "uncap", "unfed", "unfit", "unify", "union",
+            "unite", "units", "unity", "unset", "unzip", "upend", "upset", "urban", "urged", "urges",
+            "urine", "usage", "users", "usher", "using", "usual", "usurp", "utter", "udder", "ulcer",
+            "ultra", "umami", "umbra", "uncap", "unfed", "unfit", "unify", "union", "unite", "units",
+            "unity", "unset", "unzip", "upend", "upset", "urban", "urged", "urges", "urine", "usage",
+            "users", "usher", "using", "usual", "usurp", "utter", "udder", "ulcer", "ultra", "umami",
+            "umbra", "uncap", "unfed", "unfit", "unify", "union", "unite", "units", "unity", "unset",
+        
+            // V words
+            "vague", "valet", "valid", "valor", "value", "valve", "vapid", "vapor", "vault", "vaunt",
+            "vegan", "veins", "veldt", "velum", "venal", "vends", "venom", "vents", "venue", "verbs",
+            "verge", "verse", "verso", "verve", "vexed", "vexes", "vials", "viand", "vibes", "vicar",
+            "vices", "video", "views", "vigil", "vigor", "villa", "vines", "vinyl", "viola", "viper",
+            "viral", "virus", "visit", "visor", "vista", "vital", "vivid", "vixen", "vodka", "vogue",
+            "voice", "voids", "volts", "voted", "voter", "votes", "vouch", "vowed", "vowel", "vulva",
+            "vague", "valet", "valid", "valor", "value", "valve", "vapid", "vapor", "vault", "vaunt",
+            "vegan", "veins", "veldt", "velum", "venal", "vends", "venom", "vents", "venue", "verbs",
+        
+            // W words
+            "wacky", "waded", "wader", "wades", "wafer", "waged", "wager", "wages", "wagon", "waist",
+            "waits", "waive", "waked", "waken", "wakes", "waled", "wales", "walks", "walls", "waltz",
+            "wands", "waned", "wanes", "wanly", "wants", "wards", "wares", "warms", "warns", "warps",
+            "warts", "warty", "wases", "waste", "watch", "water", "watts", "waved", "waver", "waves",
+            "waxed", "waxen", "waxes", "weary", "weave", "wedge", "weeds", "weedy", "weeks", "weeps",
+            "weigh", "weird", "wells", "welsh", "wench", "wends", "wests", "whack", "whale", "whams",
+            "whang", "wharf", "wheat", "wheel", "whets", "whiff", "while", "whims", "whine", "whips",
+            "whirl", "whisk", "whist", "white", "whole", "whoop",
+        
+            // X words
+            "xenon", "xerox", 
+            // Y words
+            "yacht", "yahoo", "yanks", "yards", "yarns", "years", "yeast", "yells", "yawns", "yoked",
+            "yokes", "yolks", "young", "yours", "youth", "yoked", "yokes", "yolks", "young", "yours",
+            "youth", "yacht", "yahoo", "yanks", "yards", "yarns", "years", "yeast", "yells", "yacht",
+            "yahoo", "yanks", "yards", "yarns", "years", "yeast", "yells", "yawns", "yoked", "yokes",
+            "yolks", "young", "yours", "youth", "yoked", "yokes", "yolks", "young", "yours", "youth",
+            "yacht", "yahoo", "yanks", "yards", "yarns", "years", "yeast", "yells", "yacht", "yahoo",
+            "yanks", "yards", "yarns", "years", "yeast", "yells", "yawns", "yoked", "yokes", "yolks",
+        
+            // Z words
+            "zebra", "zeros", "zests", "zesty", "zilch", "zincs", "zines", "zings", "zingy", "zippy",
+            "zones", "zoned", "zooms", "zappy", "zoned", "zappy", "zones", "zeros", "zests", "zesty",
+            "zings", "zingy", "zippy", "zones", "zoned", "zooms", "zappy", "zoned", "zappy", "zones", 
+            "zeros", "zests", "zesty", "zilch", "zincs", "zines", "zings", "zingy", "zippy", "zones", 
+            "zoned"
+        ];
+
+        // Select a random word from the list
+        let word = wordList[Math.floor(Math.random() * wordList.length)];
+        const board = document.getElementById('board');
+        const keyboard = document.getElementById('keyboard');
+        const message = document.getElementById('message');
+        const restartButton = document.getElementById('restartButton');
+        const enterButton = document.getElementById('enterButton');
+
+        const rows = 6;
+        const cols = 5;
+        let currentRow = 0;
+        let currentCol = 0;
+        let gameActive = true;
+        let guessWord = "";
+
+        const createBoard = () => {
+            board.innerHTML = '';
+            for (let r = 0; r < rows; r++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row';
+                for (let c = 0; c < cols; c++) {
+                    const tileDiv = document.createElement('div');
+                    tileDiv.className = 'tile';
+                    tileDiv.setAttribute('data-row', r);
+                    tileDiv.setAttribute('data-col', c);
+                    rowDiv.appendChild(tileDiv);
+                }
+                board.appendChild(rowDiv);
+            }
+        };
+
+        const createKeyboard = () => {
+            keyboard.innerHTML = '';
+            const keys = 'abcdefghijklmnopqrstuvwxyz'.split('');
+            keys.forEach(key => {
+                const keyDiv = document.createElement('button');
+                keyDiv.className = 'key';
+                keyDiv.textContent = key;
+                keyDiv.setAttribute('data-key', key);
+                keyDiv.addEventListener('click', () => handleKeyPress(key));
+                keyboard.appendChild(keyDiv);
+            });
+        };
+
+        const handleKeyPress = (key) => {
+            if (!gameActive) return;
+            if (currentCol < cols) {
+                const tile = document.querySelector(`.tile[data-row='${currentRow}'][data-col='${currentCol}']`);
+                tile.textContent = key;
+                guessWord += key;
+                currentCol++;
+            }
+        };
+
+        const handleSubmit = () => {
+            if (currentCol === cols) {
+                if (guessWord === word) {
+                    endGame(true);
+                    return;
+                } else {
+                    for (let c = 0; c < cols; c++) {
+                        const tile = document.querySelector(`.tile[data-row='${currentRow}'][data-col='${c}']`);
+                        const keyDiv = document.querySelector(`.key[data-key='${tile.textContent.toLowerCase()}']`);
+                        if (word[c] === guessWord[c]) {
+                            tile.classList.add('correct');
+                            keyDiv.classList.add('correct');
+                        } else if (word.includes(guessWord[c])) {
+                            tile.classList.add('present');
+                            keyDiv.classList.add('present');
+                        } else {
+                            tile.classList.add('absent');
+                            keyDiv.classList.add('absent');
+                        }
+                    }
+                    currentRow++;
+                    currentCol = 0;
+                    guessWord = "";
+                    if (currentRow === rows) {
+                        endGame(false);
+                    }
+                }
+            }
+        };
+
+        const endGame = (won) => {
+            gameActive = false;
+            message.textContent = won ? 'Congratulations! You guessed the word!' : `Game Over! The word was "${word}".`;
+        };
+
+        const resetGame = () => {
+            word = wordList[Math.floor(Math.random() * wordList.length)]; // Pick a new random word
+            gameActive = true;
+            currentRow = 0;
+            currentCol = 0;
+            guessWord = "";
+            createBoard();
+            createKeyboard();
+            message.textContent = '';
+        };
+
+        restartButton.addEventListener('click', resetGame);
+        enterButton.addEventListener('click', handleSubmit);
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive) return;
+            if (e.key === 'Enter') {
+                handleSubmit();
+            } else if (e.key === 'Backspace') {
+                if (currentCol > 0) {
+                    currentCol--;
+                    guessWord = guessWord.slice(0, -1);
+                    const tile = document.querySelector(`.tile[data-row='${currentRow}'][data-col='${currentCol}']`);
+                    tile.textContent = '';
+                }
+            } else if (/^[a-z]$/.test(e.key)) {
+                handleKeyPress(e.key);
+            }
+        });
+
+        // Initialize the game
+        resetGame();
+    </script>
+</body>
+</html>
 
