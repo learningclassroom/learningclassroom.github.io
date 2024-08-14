@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JE3QT27RTF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JE3QT27RTF');
-</script>
-
-    
     <style>
         /* Global Styles */
         * {
@@ -60,6 +50,9 @@
             text-align: center;
             color: #00ff6a;
             text-shadow: 2px 2px 4px #000000;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
         }
 
         .scoreboard div {
@@ -78,6 +71,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -121,6 +115,7 @@
         }
     </style>
 </head>
+
 <body>
     <h1>Snake Game</h1>
     <h2>Use the Arrow Keys to Play</h2>
@@ -151,8 +146,8 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw snake
-            snake.forEach(segment => {
-                ctx.fillStyle = '#66d3fa';
+            snake.forEach((segment, index) => {
+                ctx.fillStyle = index === 0 ? '#66d3fa' : '#52b2e2';
                 ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
                 ctx.strokeStyle = '#ffffff';
                 ctx.strokeRect(segment.x, segment.y, gridSize, gridSize);
@@ -264,4 +259,5 @@
         resetGame();
     </script>
 </body>
+
 </html>
