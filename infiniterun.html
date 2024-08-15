@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Endless Runner</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JE3QT27RTF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-JE3QT27RTF');
+</script>
+    <style>
+        /* Universal Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom right, #141E30, #243B55);
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            background: linear-gradient(to bottom, #232526, #414345);
+            display: block;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+            border: 2px solid #00d2ff;
+            animation: glow 1.5s infinite alternate;
+            width: 90vw;
+            height: 90vh;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 20px #00d2ff;
+            }
+            to {
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 40px #3a7bd5;
+            }
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            right: calc(5vw + 10px);
+            font-size: 24px;
+            font-weight: bold;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            border: 2px solid #f7b733;
+            color: #f7b733;
+        }
+
+        #highscore {
+            position: absolute;
+            bottom: 10px;
+            right: calc(5vw + 10px);
+            font-size: 24px;
+            font-weight: bold;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            border: 2px solid #fc4a1a;
+            color: #fc4a1a;
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 52px;
+            color: #ff6347;
+            text-align: center;
+            visibility: hidden;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        #retry-button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            font-size: 22px;
+            color: #fff;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            visibility: hidden;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        #retry-button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #fc466b, #3f5efb);
+        }
+
+        #instructions {
+            position: absolute;
+            bottom: calc(5vh + 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #00d2ff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            color: #00d2ff;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        #friend-challenge {
+            position: absolute;
+            bottom: calc(5vh - 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #f7b733;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="score">Score: 0</div>
+        <div id="highscore">High Score: 0</div>
+        <div id="game-over">Game Over!<br><button id="retry-button">Retry</button></div>
+        <div id="instructions">Click to Jump</div>
+        <div id="friend-challenge">Let's see if you can get a better score than your friends!</div>
+    </div>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreDisplay = document.getElementById("score");
+        const highScoreDisplay = document.getElementById("highscore");
+        const gameOverDisplay = document.getElementById("game-over");
+        const retryButton = document.getElementById("retry-button");
+        const instructions = document.getElementById("instructions");
+        const friendChallenge = document.getElementById("friend-challenge");
+
+        canvas.width = window.innerWidth > 1200 ? 1200 : window.innerWidth * 0.9;
+        canvas.height = window.innerHeight > 800 ? 800 : window.innerHeight * 0.9;
+
+        let character = {
+            x: 50,
+            y: canvas.height - 100,
+            width: 50,
+            height: 50,
+            dy: 0,
+            gravity: 0.8,
+            jumpStrength: -15,
+            isJumping: false,
+            color: "#FF6347"
+        };
+
+        let obstacles = [];
+        let score = 0;
+        let highScore = getCookie("highscore") || 0;
+        let gameSpeed = 4;
+        let gameActive = true;
+
+        highScoreDisplay.innerText = `High Score: ${highScore}`;
+
+        function drawCharacter() {
+            ctx.fillStyle = character.color;
+            ctx.fillRect(character.x, character.y, character.width, character.height);
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = "#4682B4";
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+        }
+
+        function updateObstacles() {
+            if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - 300) {
+                const height = 40 + Math.random() * 60;
+                obstacles.push({
+                    x: canvas.width,
+                    y: canvas.height - height,
+                    width: 30,
+                    height: height
+                });
+            }
+
+            obstacles.forEach(obstacle => {
+                obstacle.x -= gameSpeed;
+
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.shift();
+                    score++;
+                    gameSpeed += 0.1;
+                }
+
+                if (
+                    character.x < obstacle.x + obstacle.width &&
+                    character.x + character.width > obstacle.x &&
+                    character.y < obstacle.y + obstacle.height &&
+                    character.y + character.height > obstacle.y
+                ) {
+                    gameActive = false;
+                    handleGameOver();
+                }
+            });
+        }
+
+        function updateCharacter() {
+            character.y += character.dy;
+            character.dy += character.gravity;
+
+            if (character.y + character.height >= canvas.height) {
+                character.y = canvas.height - character.height;
+                character.dy = 0;
+                character.isJumping = false;
+            }
+        }
+
+        function jump() {
+            if (!character.isJumping) {
+                character.dy = character.jumpStrength;
+                character.isJumping = true;
+            }
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawCharacter();
+            updateCharacter();
+            drawObstacles();
+            updateObstacles();
+
+            scoreDisplay.innerText = `Score: ${score}`;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function handleGameOver() {
+            gameOverDisplay.style.visibility = "visible";
+            retryButton.style.visibility = "visible";
+            instructions.style.visibility = "hidden";
+            friendChallenge.style.visibility = "hidden";
+
+            if (score > highScore) {
+                highScore = score;
+                setCookie("highscore", highScore, 365);
+                highScoreDisplay.innerText = `High Score: ${highScore}`;
+            }
+        }
+
+        retryButton.addEventListener("click", () => {
+            score = 0;
+            gameSpeed = 4;
+            gameActive = true;
+            obstacles = [];
+            gameOverDisplay.style.visibility = "hidden";
+            retryButton.style.visibility = "hidden";
+            instructions.style.visibility = "visible";
+            friendChallenge.style.visibility = "visible";
+            gameLoop();
+        });
+
+        canvas.addEventListener("mousedown", jump);
+        canvas.addEventListener("touchstart", jump);
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
