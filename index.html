@@ -99,6 +99,12 @@
             z-index: 1;
         }
 
+        .item:hover {
+            transform: translateY(-10px) rotate(3deg);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px #00ff6a;
+        }
+
         .item::before {
             content: '';
             position: absolute;
@@ -114,12 +120,6 @@
 
         .item:hover::before {
             left: 0;
-        }
-
-        .item:hover {
-            transform: translateY(-10px) rotate(3deg);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
 
         .square {
@@ -141,6 +141,7 @@
         .square:hover {
             background: linear-gradient(135deg, #2980b9, #27ae60);
             transform: scale(1.1) rotate(-3deg);
+            box-shadow: 0 0 20px #00ff6a;
         }
 
         .name {
@@ -149,16 +150,6 @@
             font-weight: bold;
             letter-spacing: 1px;
             z-index: 1;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.5s ease-in-out forwards;
-            animation-delay: 0.3s;
-        }
-
-        .item:hover .name {
-            animation: fadeInUp 0.5s ease-in-out forwards;
-            transform: translateY(0);
-            opacity: 1;
         }
 
         /* Keyframe Animations */
@@ -224,6 +215,22 @@
                 font-size: 1em;
             }
         }
+
+        /* Suggestion Link */
+        .suggestion-link {
+            display: block;
+            margin-top: 50px;
+            font-size: 1.5em;
+            color: #00ff6a;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .suggestion-link:hover {
+            color: #3498db;
+            transform: scale(1.1);
+        }
+
     </style>
 </head>
 <body>
@@ -268,6 +275,8 @@
             <div class="name">Coming Soon</div>
         </div>
     </div>
+
+    <a href="https://forms.gle/xogspjjwwRw44S4s9" class="suggestion-link">Click here to give us your suggestions!</a>
 
     <script>
         // Additional JavaScript interactions can be added here if needed
