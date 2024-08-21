@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to the Learning Classroom</title>
+    <title>Welcome to WhyTryGames</title>
     <link rel="icon" href="LC.png" type="image/png">
-
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JE3QT27RTF"></script>
@@ -38,120 +37,33 @@
             flex-direction: column;
             padding: 20px;
             overflow: hidden;
-            cursor: url('https://cdn.custom-cursor.com/db/72/23745/cursor.png'), auto;
         }
 
         h1 {
-            font-size: 4em;
-            margin-bottom: 10px;
-            animation: fadeInDown 1s ease-in-out forwards;
+            font-size: 6em;
+            margin-bottom: 20px;
             color: #00ff6a;
             text-shadow: 3px 3px 5px #000000;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             font-weight: bold;
+            animation: fadeInDown 1s ease-in-out forwards;
         }
 
-        h2 {
-            font-size: 1.8em;
-            margin-bottom: 30px;
-            color: #eee;
-            animation: fadeInDown 1.5s ease-in-out forwards;
-            opacity: 0;
-            animation-delay: 0.5s;
-        }
-
-        p.bookmark-message {
-            font-size: 1.2em;
-            margin-bottom: 40px;
+        a.big-link {
+            font-size: 2em;
             color: #00ff6a;
-            animation: fadeInDown 2s ease-in-out forwards;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            border: 2px solid #00ff6a;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            animation-delay: 1s;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-            animation: fadeInUp 1.5s ease-in-out forwards;
-            opacity: 0;
-            animation-delay: 2s;
-        }
-
-        .item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .item:hover {
-            transform: translateY(-10px) rotate(3deg);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 20px #00ff6a;
-        }
-
-        .item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 70%);
-            transform: rotate(45deg);
-            transition: left 0.5s ease;
-            z-index: 0;
-        }
-
-        .item:hover::before {
-            left: 0;
-        }
-
-        .square {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #3498db, #2ecc71);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3em;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 10px;
-            transition: background 0.3s ease, transform 0.3s ease;
-            z-index: 1;
-        }
-
-        .square:hover {
-            background: linear-gradient(135deg, #2980b9, #27ae60);
-            transform: scale(1.1) rotate(-3deg);
-            box-shadow: 0 0 20px #00ff6a;
-        }
-
-        .name {
-            font-size: 1.3em;
-            color: #ffffff;
-            font-weight: bold;
-            letter-spacing: 1px;
-            z-index: 1;
+        a.big-link:hover {
+            background: #00ff6a;
+            color: #0f2027;
         }
 
         /* Keyframe Animations */
@@ -166,119 +78,12 @@
             }
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 3em;
-            }
-
-            h2, .bookmark-message {
-                font-size: 1.4em;
-            }
-
-            .square {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5em;
-            }
-
-            .name {
-                font-size: 1.2em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2.5em;
-            }
-
-            h2, .bookmark-message {
-                font-size: 1.2em;
-            }
-
-            .square {
-                width: 80px;
-                height: 80px;
-                font-size: 2em;
-            }
-
-            .name {
-                font-size: 1em;
-            }
-        }
-
-        /* Suggestion Link */
-        .suggestion-link {
-            display: block;
-            margin-top: 50px;
-            font-size: 1.5em;
-            color: #00ff6a;
-            text-decoration: none;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-
-        .suggestion-link:hover {
-            color: #3498db;
-            transform: scale(1.1);
-        }
-
     </style>
 </head>
 <body>
-    <h1>Welcome to the Learning Classroom</h1>
-    <h2>Select a Game to Start Playing</h2>
-    <p class="bookmark-message">Bookmark this page for future reference! More games coming soon.</p>
-    <div class="container">
-        <div class="item" onclick="window.location.href='snake_game.html'">
-            <div class="square">🐍</div>
-            <div class="name">Snake Game</div>
-        </div>
-        <div class="item" onclick="window.location.href='slimejump.html'">
-            <div class="square">🟢</div>
-            <div class="name">Slime Jump</div>
-        </div>
-        <div class="item" onclick="window.location.href='cpstest.html'">
-            <div class="square">🖱️</div>
-            <div class="name">CPS Test</div>
-        </div>
-        <div class="item" onclick="window.location.href='wordguess.html'">
-            <div class="square">🟨</div>
-            <div class="name">Word Guess</div>
-        </div>
-        <div class="item" onclick="window.location.href='beerpour.html'">
-            <div class="square">🍺</div>
-            <div class="name">Beer Pour</div>
-        </div>
-        <div class="item" onclick="window.location.href='infiniterun.html'">
-            <div class="square">♾️</div>
-            <div class="name">Infinite Run</div>
-        </div>
-        <div class="item">
-            <div class="square">🎤</div>
-            <div class="name">Coming Soon</div>
-        </div>
-        <div class="item">
-            <div class="square">🧠</div>
-            <div class="name">Coming Soon</div>
-        </div>
-        <div class="item">
-            <div class="square">📚</div>
-            <div class="name">Coming Soon</div>
-        </div>
-    </div>
-
-    <a href="https://forms.gle/xogspjjwwRw44S4s9" class="suggestion-link">Click here to give us your suggestions!</a>
+    <h1>OUR NEW WEBSITE (NEW GAMES DAILY)
+    </h1>
+    <a href="https://whytrygames.github.io" class="big-link">Visit whytrygames.github.io</a>
 
     <script>
         // Additional JavaScript interactions can be added here if needed
